@@ -1,5 +1,8 @@
 package svd
 
+import collection.JavaConverters._
+//import scala.collection.breakOut
+
 import org.apache.spark.mllib.linalg
 import org.apache.spark.mllib.linalg.distributed.RowMatrix
 import org.apache.spark.mllib.linalg.{Matrix, SingularValueDecomposition, Vector, Vectors}
@@ -41,22 +44,24 @@ object DWDTest extends App {
     orderBy('sid, 'month, 'day)
   //  h.show
 
+//  val l0 = h.filter('sid === 1420).select('tavg).map(f => f.getDouble(0))
+//    .collectAsList.asScala.map(_.doubleValue)(breakOut)
   val l0 = h.filter('sid === 1420).select('tavg).map(f => f.getDouble(0))
-    .collectAsList
+    .collectAsList.asScala.map(_.doubleValue).toList
   val l1 = h.filter('sid === 7341).select('tavg).map(f => f.getDouble(0))
-    .collectAsList
+    .collectAsList.asScala.map(_.doubleValue).toList
   val l2 = h.filter('sid === 917).select('tavg).map(f => f.getDouble(0))
-    .collectAsList
+    .collectAsList.asScala.map(_.doubleValue).toList
   println(l0)
   println(l0.getClass.getName)
 
-  val x = List(12.0, -51.0, 4.0).toArray
-  println(x)
-  println("> "+x.getClass.getName)
-//  val x = l0.toArray
-  val y = List(6.0, 167.0, -68.0).toArray
-//  val y = l1.toArray
-  val z = List(-4.0, 24.0, -41.0).toArray
+//  val x = List(12.0, -51.0, 4.0).toArray
+//  println(x)
+//  println("> "+x.getClass.getName)
+  val x = l0.toArray
+//  val y = List(6.0, 167.0, -68.0).toArray
+  val y = l1.toArray
+//  val z = List(-4.0, 24.0, -41.0).toArray
   //val x = Seq(12.0, -51.0, 4.0)
   //  val x = Array(12.0, -51.0, 4.0)
   val rows: RDD[Vector] = spark.sparkContext.parallelize(Array(
